@@ -8,7 +8,13 @@ const app = express();
 
 const notesRoutes = require("./routes/notes");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://notes-management-system-sigma.vercel.app/"],
+
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
