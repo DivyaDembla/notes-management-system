@@ -76,12 +76,16 @@ items-center
 mt-5
 "
       >
-        <small
-          className="
-text-gray-400
-"
-        >
-          Edited {new Date(note.updatedAt).toLocaleString()}
+        <small className="text-gray-400">
+          Created: {new Date(note.createdAt).toLocaleDateString()}
+          {note.updatedAt &&
+            new Date(note.updatedAt).getTime() !==
+              new Date(note.createdAt).getTime() && (
+              <>
+                <br />
+                Edited: {new Date(note.updatedAt).toLocaleDateString()}
+              </>
+            )}
         </small>
       </div>
 

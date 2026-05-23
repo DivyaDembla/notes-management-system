@@ -2,11 +2,18 @@
 
 import axios from "axios";
 
+import { getDeviceId } from "../utils/device";
+
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",
 });
 
-export const getNotes = () => API.get("/notes");
+export const getNotes = () =>
+  API.get("/notes", {
+    params: {
+      deviceId: getDeviceId(),
+    },
+  });
 
 export const createNote = (data) => API.post("/notes", data);
 

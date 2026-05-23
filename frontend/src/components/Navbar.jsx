@@ -43,7 +43,7 @@ text-3xl
 font-semibold
 "
         >
-          Notes
+          Noted
         </h1>
       </div>
 

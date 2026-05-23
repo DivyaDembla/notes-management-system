@@ -1,17 +1,28 @@
 const db = require("../config/db");
 
 exports.getNotes = (req, res) => {
-  db.query("SELECT * FROM notes ORDER BY updatedAt DESC", (err, result) => {
-    if (err) {
-      return res.status(500).json(err);
-    }
+  const { deviceId } = req.query;
 
-    res.json(result);
-  });
+  db.query(
+    `
+SELECT *
+FROM notes
+WHERE deviceId=?
+ORDER BY updatedAt DESC
+`,
+    [deviceId],
+
+    (err, result) => {
+      if (err) {
+        return res.status(500).json(err);
+      }
+
+      res.json(result);
+    },
+  );
 };
-
 exports.createNote = (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, deviceId } = req.body;
 
   if (!title) {
     return res.status(400).json({
@@ -20,8 +31,8 @@ exports.createNote = (req, res) => {
   }
 
   db.query(
-    "INSERT INTO notes(title, content,color) VALUES(?,?,?)",
-    [title, content, "white"],
+    `INSERT INTO notes(title,content,color,deviceId)VALUES(?,?,?,?)`,
+    [title, content, "white", deviceId],
 
     (err, result) => {
       if (err) {
@@ -54,7 +65,10 @@ exports.updateNote = (req, res) => {
   db.query(
     `
 UPDATE notes
-SET title=?, content=?
+SET
+title=?,
+content=?,
+updatedAt=CURRENT_TIMESTAMP
 WHERE id=?
 `,
     [title, content, req.params.id],
@@ -88,10 +102,11 @@ exports.togglePin = (req, res) => {
   db.query(
     `
 UPDATE notes
-SET pinned = NOT pinned
+SET
+pinned=NOT pinned,
+updatedAt=updatedAt
 WHERE id=?
 `,
-
     [req.params.id],
 
     (err) => {
@@ -110,10 +125,11 @@ exports.changeColor = (req, res) => {
   db.query(
     `
 UPDATE notes
-SET color=?
+SET
+color=?,
+updatedAt=updatedAt
 WHERE id=?
 `,
-
     [color, req.params.id],
 
     (err) => {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { createNote } from "../services/notesApi";
+import { getDeviceId } from "../utils/device";
 
 function CreateNote({ refreshNotes }) {
   const [title, setTitle] = useState("");
@@ -18,8 +19,8 @@ function CreateNote({ refreshNotes }) {
       await createNote({
         title,
         content,
+        deviceId: getDeviceId(),
       });
-
       setTitle("");
 
       setContent("");
