@@ -119,7 +119,7 @@ app.get("/user-notes/:userId", (req, res) => {
   //also userId needs to be a number for correct comparsion.
   const userId = Number(req.params.userId);
 
-  // FIX 12: Use === instead of = and convert userId to Number for correct filtering
+  // FIX 12: Use === instead of = and convert userId to Number for correct filtering.
   const userNotes = notes.filter((n) => n.userId === userId);
   res.send(userNotes);
 });
@@ -137,7 +137,7 @@ app.post("/login", (req, res) => {
 
 app.get("/profile/:id", (req, res) => {
   const id = Number(req.params.id);
-  //FIX 14: 'filter' returns an array, we need to use 'find' to get the single user object
+  //FIX 14: 'filter' returns an array, we need to use 'find' to get the single user object.
   const user = users.find((u) => u.id === id);
 
   //check if user exists before trying to access its properties
