@@ -21,14 +21,20 @@ function CreateNote({ refreshNotes }) {
       });
 
       setTitle("");
+
       setContent("");
 
-      refreshNotes();
-    } catch {
+      await refreshNotes();
+    } catch (err) {
+      console.log(
+        "CREATE ERROR:",
+
+        err.response?.data || err.message,
+      );
+
       alert("Failed");
     }
   }
-
   return (
     <div
       className="

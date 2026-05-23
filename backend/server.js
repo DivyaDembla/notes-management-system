@@ -10,7 +10,11 @@ const notesRoutes = require("./routes/notes");
 
 app.use(
   cors({
-    origin: ["https://notes-management-system-sigma.vercel.app/"],
+    origin: [
+      "http://localhost:5173",
+
+      "https://notes-management-system-sigma.vercel.app",
+    ],
 
     credentials: true,
   }),
