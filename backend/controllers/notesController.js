@@ -22,7 +22,7 @@ ORDER BY updatedAt DESC
   );
 };
 exports.createNote = (req, res) => {
-  const { title, content, deviceId } = req.body;
+  const { title, content, deviceId, doodles } = req.body;
 
   if (!title) {
     return res.status(400).json({
@@ -31,11 +31,17 @@ exports.createNote = (req, res) => {
   }
 
   db.query(
-    `INSERT INTO notes(title,content,color,deviceId)VALUES(?,?,?,?)`,
-    [title, content, "white", deviceId],
+    `
+INSERT INTO notes
+(title, content, color, deviceId, doodles)
+VALUES (?, ?, ?, ?, ?)
+`,
+    [title, content, "white", deviceId, JSON.stringify(doodles || [])],
 
     (err, result) => {
       if (err) {
+        console.log(err);
+
         return res.status(500).json(err);
       }
 
@@ -60,7 +66,7 @@ exports.getNoteById = (req, res) => {
 };
 
 exports.updateNote = (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, doodles } = req.body;
 
   db.query(
     `
@@ -68,13 +74,18 @@ UPDATE notes
 SET
 title=?,
 content=?,
+doodles=?,
 updatedAt=CURRENT_TIMESTAMP
 WHERE id=?
 `,
-    [title, content, req.params.id],
+    [title, content, JSON.stringify(doodles || []), req.params.id],
 
     (err) => {
-      if (err) return res.status(500).json(err);
+      if (err) {
+        console.log(err);
+
+        return res.status(500).json(err);
+      }
 
       res.json({
         message: "Updated",

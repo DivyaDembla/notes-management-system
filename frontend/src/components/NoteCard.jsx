@@ -11,6 +11,16 @@ const colors = [
 ];
 
 function NoteCard({ note, remove, edit, pin, change }) {
+  let doodles = [];
+
+  if (note.doodles) {
+    try {
+      doodles = JSON.parse(note.doodles);
+    } catch {
+      doodles = [];
+    }
+  }
+
   return (
     <div
       style={{
@@ -28,6 +38,35 @@ hover:shadow-md
 transition
 "
     >
+      {doodles.length > 0 && (
+        <div
+          className="
+flex
+flex-wrap
+gap-2
+mb-4
+"
+        >
+          {doodles.map((doodle, index) => (
+            <img
+              key={index}
+              src={doodle}
+              alt={`Doodle ${index}`}
+              className="
+w-28
+h-20
+sm:w-32
+sm:h-24
+object-cover
+rounded-lg
+border
+bg-white
+"
+            />
+          ))}
+        </div>
+      )}
+
       <div
         className="
 flex

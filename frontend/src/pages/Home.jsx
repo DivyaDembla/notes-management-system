@@ -107,10 +107,6 @@ bg-[#f1f3f4]
       {deleteId && (
         <DeleteModal close={() => setDeleteId(null)} confirm={remove} />
       )}
-
-      {deleteId && (
-        <DeleteModal close={() => setDeleteId(null)} confirm={remove} />
-      )}
     </div>
   );
 }
