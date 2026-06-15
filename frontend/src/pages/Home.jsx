@@ -19,6 +19,9 @@ function Home() {
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState(null);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("darkMode") === "true",
+  );
 
   async function loadNotes() {
     const res = await getNotes();
@@ -62,6 +65,10 @@ function Home() {
     init();
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
+
   async function color(id, value) {
     await changeColor(id, value);
 
@@ -79,14 +86,21 @@ function Home() {
 
   return (
     <div
-      className="
+      className={`
 min-h-screen
-bg-[#f1f3f4]
-"
+transition-colors
+duration-300
+${darkMode ? "bg-[#202124] text-white" : "bg-[#f1f3f4] text-black"}
+`}
     >
-      <Navbar search={search} setSearch={setSearch} />
+      <Navbar
+        search={search}
+        setSearch={setSearch}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
 
-      <CreateNote refreshNotes={loadNotes} />
+      <CreateNote refreshNotes={loadNotes} darkMode={darkMode} />
 
       <NotesGrid
         notes={filtered}
@@ -94,6 +108,7 @@ bg-[#f1f3f4]
         edit={edit}
         pin={pin}
         change={color}
+        darkMode={darkMode}
       />
 
       {selected && (
@@ -101,11 +116,16 @@ bg-[#f1f3f4]
           note={selected}
           close={() => setSelected(null)}
           refresh={loadNotes}
+          darkMode={darkMode}
         />
       )}
 
       {deleteId && (
-        <DeleteModal close={() => setDeleteId(null)} confirm={remove} />
+        <DeleteModal
+          close={() => setDeleteId(null)}
+          confirm={remove}
+          darkMode={darkMode}
+        />
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-function DoodleModal({ onSave, onClose }) {
+function DoodleModal({ onSave, onClose, darkMode }) {
   const canvasRef = useRef(null);
 
   const [drawing, setDrawing] = useState(false);
@@ -8,6 +8,8 @@ function DoodleModal({ onSave, onClose }) {
   const [penColor, setPenColor] = useState("#000000");
 
   const [canvasColor, setCanvasColor] = useState("#ffffff");
+
+  const isMobile = window.innerWidth < 640;
 
   function startDraw(e) {
     const canvas = canvasRef.current;
@@ -19,22 +21,6 @@ function DoodleModal({ onSave, onClose }) {
     ctx.beginPath();
 
     ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-
-    setDrawing(true);
-  }
-
-  function startTouch(e) {
-    const touch = e.touches[0];
-
-    const canvas = canvasRef.current;
-
-    const rect = canvas.getBoundingClientRect();
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.beginPath();
-
-    ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
 
     setDrawing(true);
   }
@@ -59,6 +45,26 @@ function DoodleModal({ onSave, onClose }) {
     ctx.stroke();
   }
 
+  function stopDraw() {
+    setDrawing(false);
+  }
+
+  function startTouch(e) {
+    const touch = e.touches[0];
+
+    const canvas = canvasRef.current;
+
+    const rect = canvas.getBoundingClientRect();
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.beginPath();
+
+    ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+
+    setDrawing(true);
+  }
+
   function drawTouch(e) {
     if (!drawing) return;
 
@@ -81,7 +87,7 @@ function DoodleModal({ onSave, onClose }) {
     ctx.stroke();
   }
 
-  function stopDraw() {
+  function stopTouch() {
     setDrawing(false);
   }
 
@@ -91,10 +97,6 @@ function DoodleModal({ onSave, onClose }) {
     const ctx = canvas.getContext("2d");
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  function stopTouch() {
-    setDrawing(false);
   }
 
   function saveDoodle() {
@@ -122,34 +124,30 @@ function DoodleModal({ onSave, onClose }) {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-2 sm:p-4">
       <div
         className="
 flex
 flex-col
 sm:flex-row
 justify-between
-mb-4
 gap-4
+mb-4
 "
       >
         <div>
           <p
-            className="
+            className={`
 text-sm
 font-medium
 mb-2
-"
+${darkMode ? "text-white" : "text-black"}
+`}
           >
             Pen Color
           </p>
 
-          <div
-            className="
-flex
-gap-2
-"
-          >
+          <div className="flex gap-2">
             {["#000000", "#ef4444", "#3b82f6", "#22c55e", "#a855f7"].map(
               (color) => (
                 <button
@@ -162,7 +160,6 @@ gap-2
 w-5
 h-5
 rounded-full
-border
 transition
 hover:scale-110
 ${penColor === color ? "ring-2 ring-gray-500" : ""}
@@ -175,21 +172,17 @@ ${penColor === color ? "ring-2 ring-gray-500" : ""}
 
         <div>
           <p
-            className="
+            className={`
 text-sm
 font-medium
 mb-2
-"
+${darkMode ? "text-white" : "text-black"}
+`}
           >
             Canvas Color
           </p>
 
-          <div
-            className="
-flex
-gap-2
-"
-          >
+          <div className="flex gap-2">
             {["#ffffff", "#fef3c7", "#dbeafe", "#dcfce7", "#000000"].map(
               (color) => (
                 <button
@@ -202,7 +195,6 @@ gap-2
 w-5
 h-5
 rounded-full
-border
 transition
 hover:scale-110
 ${canvasColor === color ? "ring-2 ring-gray-500" : ""}
@@ -214,26 +206,30 @@ ${canvasColor === color ? "ring-2 ring-gray-500" : ""}
         </div>
       </div>
 
-      <canvas
-        ref={canvasRef}
-        width={500}
-        height={300}
-        onMouseDown={startDraw}
-        onMouseMove={draw}
-        onMouseUp={stopDraw}
-        onMouseLeave={stopDraw}
-        onTouchStart={startTouch}
-        onTouchMove={drawTouch}
-        onTouchEnd={stopTouch}
-        style={{
-          backgroundColor: canvasColor,
-          touchAction: "none",
-        }}
-        className="
-border
+      <div className="overflow-x-auto">
+        <canvas
+          ref={canvasRef}
+          width={isMobile ? 320 : 500}
+          height={isMobile ? 220 : 300}
+          onMouseDown={startDraw}
+          onMouseMove={draw}
+          onMouseUp={stopDraw}
+          onMouseLeave={stopDraw}
+          onTouchStart={startTouch}
+          onTouchMove={drawTouch}
+          onTouchEnd={stopTouch}
+          style={{
+            backgroundColor: canvasColor,
+            touchAction: "none",
+          }}
+          className={`
 rounded-xl
-"
-      />
+border
+mx-auto
+${darkMode ? "border-gray-600" : "border-gray-300"}
+`}
+        />
+      </div>
 
       <div
         className="
@@ -241,16 +237,19 @@ flex
 justify-end
 gap-3
 mt-4
+flex-wrap
 "
       >
         <button
           onClick={clearCanvas}
           className="
 bg-red-500
+hover:bg-red-600
 text-white
 px-4
 py-2
 rounded-lg
+transition
 "
         >
           Clear
@@ -258,12 +257,17 @@ rounded-lg
 
         <button
           onClick={onClose}
-          className="
-bg-gray-300
+          className={`
 px-4
 py-2
 rounded-lg
-"
+transition
+${
+  darkMode
+    ? "bg-gray-700 hover:bg-gray-600 text-white"
+    : "bg-gray-300 hover:bg-gray-400 text-black"
+}
+`}
         >
           Cancel
         </button>
@@ -272,10 +276,12 @@ rounded-lg
           onClick={saveDoodle}
           className="
 bg-green-500
+hover:bg-green-600
 text-white
 px-4
 py-2
 rounded-lg
+transition
 "
         >
           Save Sketch

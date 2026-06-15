@@ -1,4 +1,4 @@
-function DeleteModal({ close, confirm }) {
+function DeleteModal({ close, confirm, darkMode }) {
   return (
     <div
       className="
@@ -12,12 +12,15 @@ z-50
 "
     >
       <div
-        className="
-bg-white
+        className={`
 rounded-2xl
 p-8
-w-[400px]
-"
+w-[90vw]
+max-w-[400px]
+transition-colors
+duration-300
+${darkMode ? "bg-[#303134] text-white" : "bg-white text-black"}
+`}
       >
         <h2
           className="
@@ -29,10 +32,10 @@ font-semibold
         </h2>
 
         <p
-          className="
+          className={`
 mt-3
-text-gray-500
-"
+${darkMode ? "text-gray-400" : "text-gray-500"}
+`}
         >
           This action cannot be undone.
         </p>
@@ -47,12 +50,13 @@ mt-8
         >
           <button
             onClick={close}
-            className="
+            className={`
 px-5
 py-2
 rounded-xl
-border
-"
+transition
+${darkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-gray-200 hover:bg-gray-300"}
+`}
           >
             Cancel
           </button>

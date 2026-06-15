@@ -1,6 +1,6 @@
 import NoteCard from "./NoteCard";
 
-function NotesGrid({ notes, remove, edit, pin, change }) {
+function NotesGrid({ notes, remove, edit, pin, change, darkMode }) {
   if (notes.length === 0) {
     return (
       <div
@@ -43,6 +43,7 @@ space-y-6
           edit={edit}
           pin={pin}
           change={change}
+          darkMode={darkMode}
         />
       ))}
     </div>

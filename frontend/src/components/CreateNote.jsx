@@ -4,7 +4,7 @@ import { createNote } from "../services/notesApi";
 import { getDeviceId } from "../utils/device";
 import DoodleModal from "./DoodleModal";
 
-function CreateNote({ refreshNotes }) {
+function CreateNote({ refreshNotes, darkMode }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [showDoodle, setShowDoodle] = useState(false);
@@ -43,19 +43,20 @@ function CreateNote({ refreshNotes }) {
   return (
     <>
       <div
-        className="
+        className={`
 w-[92%]
 sm:w-[85%]
 md:max-w-[600px]
 mx-auto
 mt-6
-bg-white
 rounded-2xl
 border
-border-gray-300
 shadow-sm
 p-4
-"
+transition-colors
+duration-300
+${darkMode ? "bg-[#303134] border-gray-700" : "bg-white border-gray-300"}
+`}
       >
         {doodles.length > 0 && (
           <div
@@ -113,24 +114,27 @@ text-sm
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="
+          className={`
 w-full
 mb-4
 outline-none
 font-semibold
-"
+bg-transparent
+${darkMode ? "text-white placeholder:text-gray-400" : "text-black"}
+`}
         />
-
         <textarea
           rows="2"
           placeholder="Take a note..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="
+          className={`
 w-full
 outline-none
 resize-none
-"
+bg-transparent
+${darkMode ? "text-white placeholder:text-gray-400" : "text-black"}
+`}
         />
 
         <div
@@ -144,11 +148,13 @@ mt-4
           <button
             type="button"
             onClick={() => setShowDoodle(true)}
-            className="
-text-gray-600
-hover:text-black
+            className={`
 text-lg
-"
+transition
+${
+  darkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"
+}
+`}
           >
             <FaPen />
           </button>
@@ -185,14 +191,16 @@ z-50
 "
         >
           <div
-            className="
-bg-white
-p-4
+            className={`
 rounded-2xl
-shadow-lg
-"
+p-3
+w-[95vw]
+max-w-[600px]
+${darkMode ? "bg-[#303134]" : "bg-white"}
+`}
           >
             <DoodleModal
+              darkMode={darkMode}
               onSave={(image) => setDoodles((prev) => [...prev, image])}
               onClose={() => setShowDoodle(false)}
             />

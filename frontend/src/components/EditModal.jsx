@@ -3,12 +3,13 @@ import { FaPen } from "react-icons/fa";
 import { updateNote } from "../services/notesApi";
 import DoodleModal from "./DoodleModal";
 
-function EditModal({ note, close, refresh }) {
+function EditModal({ note, close, refresh, darkMode }) {
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
 
   const [showDoodle, setShowDoodle] = useState(false);
   const [previewDoodle, setPreviewDoodle] = useState(null);
+
   const [downloadTimestamp] = useState(() => Date.now());
 
   const [doodles, setDoodles] = useState(() => {
@@ -45,22 +46,26 @@ flex
 justify-center
 items-center
 z-50
+p-4
 "
       >
         <div
-          className="
-bg-white
+          className={`
 rounded-2xl
 p-6
-w-[95vw]
+w-full
 max-w-[700px]
 max-h-[90vh]
 overflow-y-auto
-"
+transition-colors
+duration-300
+${darkMode ? "bg-[#303134] text-white" : "bg-white text-black"}
+`}
         >
           <h2
             className="
 text-2xl
+font-semibold
 mb-5
 "
           >
@@ -113,6 +118,7 @@ rounded-full
 flex
 items-center
 justify-center
+text-sm
 "
                   >
                     ×
@@ -124,14 +130,16 @@ justify-center
 
           <button
             onClick={() => setShowDoodle(true)}
-            className="
+            className={`
 flex
 items-center
 gap-2
 mb-4
-text-gray-600
-hover:text-black
-"
+transition
+${
+  darkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"
+}
+`}
           >
             <FaPen />
             Add Doodle
@@ -140,44 +148,69 @@ hover:text-black
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="
+            className={`
 w-full
 mb-4
 border
 p-3
 rounded-xl
-"
+bg-transparent
+outline-none
+${darkMode ? "border-gray-600 text-white" : "border-gray-300 text-black"}
+`}
           />
 
           <textarea
             rows="6"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="
+            className={`
 w-full
 border
 p-3
 rounded-xl
-"
+bg-transparent
+resize-none
+outline-none
+${darkMode ? "border-gray-600 text-white" : "border-gray-300 text-black"}
+`}
           />
 
           <div
             className="
 flex
 justify-end
-gap-4
+gap-3
 mt-5
 "
           >
-            <button onClick={close}>Cancel</button>
+            <button
+              onClick={close}
+              className={`
+px-4
+py-2
+rounded-xl
+transition
+${
+  darkMode
+    ? "bg-gray-700 hover:bg-gray-600 text-white"
+    : "bg-gray-200 hover:bg-gray-300 text-black"
+}
+`}
+            >
+              Cancel
+            </button>
 
             <button
               onClick={save}
               className="
 bg-yellow-400
+hover:bg-yellow-500
 px-5
 py-2
 rounded-xl
+transition
+text-black
 "
             >
               Save
@@ -196,16 +229,20 @@ flex
 justify-center
 items-center
 z-[60]
+p-4
 "
         >
           <div
-            className="
-bg-white
+            className={`
 rounded-2xl
 p-4
-"
+w-full
+max-w-[600px]
+${darkMode ? "bg-[#303134]" : "bg-white"}
+`}
           >
             <DoodleModal
+              darkMode={darkMode}
               onSave={(image) => setDoodles((prev) => [...prev, image])}
               onClose={() => setShowDoodle(false)}
             />
