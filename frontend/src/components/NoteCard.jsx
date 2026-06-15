@@ -207,20 +207,26 @@ md:gap-4
         >
           <button
             onClick={() => edit(note)}
-            className="
-hover:text-blue-500
+            className={`
 transition
-"
+hover:text-blue-500
+${
+  isCustomColor ? "text-gray-700" : darkMode ? "text-gray-300" : "text-gray-500"
+}
+`}
           >
             <FaEdit />
           </button>
 
           <button
             onClick={() => remove(note.id)}
-            className="
-hover:text-red-500
+            className={`
 transition
-"
+hover:text-red-500
+${
+  isCustomColor ? "text-gray-700" : darkMode ? "text-gray-300" : "text-gray-500"
+}
+`}
           >
             <FaTrash />
           </button>
