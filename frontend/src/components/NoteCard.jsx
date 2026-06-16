@@ -62,6 +62,7 @@ border
 transition-all
 duration-300
 hover:shadow-lg
+hover:-translate-y-1
 ${darkMode ? "border-gray-700" : "border-gray-200"}
 `}
     >

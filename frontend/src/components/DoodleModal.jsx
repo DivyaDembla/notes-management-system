@@ -9,6 +9,8 @@ function DoodleModal({ onSave, onClose, darkMode }) {
 
   const [canvasColor, setCanvasColor] = useState("#ffffff");
 
+  const [hasDrawn, setHasDrawn] = useState(false);
+
   const isMobile = window.innerWidth < 640;
 
   function startDraw(e) {
@@ -27,6 +29,8 @@ function DoodleModal({ onSave, onClose, darkMode }) {
 
   function draw(e) {
     if (!drawing) return;
+
+    setHasDrawn(true);
 
     const canvas = canvasRef.current;
 
@@ -68,6 +72,8 @@ function DoodleModal({ onSave, onClose, darkMode }) {
   function drawTouch(e) {
     if (!drawing) return;
 
+    setHasDrawn(true);
+
     const touch = e.touches[0];
 
     const canvas = canvasRef.current;
@@ -94,12 +100,19 @@ function DoodleModal({ onSave, onClose, darkMode }) {
   function clearCanvas() {
     const canvas = canvasRef.current;
 
+    setHasDrawn(false);
+
     const ctx = canvas.getContext("2d");
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
   function saveDoodle() {
+    if (!hasDrawn) {
+      alert("Draw something first");
+      return;
+    }
+
     const canvas = canvasRef.current;
 
     const tempCanvas = document.createElement("canvas");
