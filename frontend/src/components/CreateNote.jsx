@@ -128,11 +128,17 @@ ${darkMode ? "text-white placeholder:text-gray-400" : "text-black"}
           placeholder="Take a note..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          onInput={(e) => {
+            e.target.style.height = "auto";
+            e.target.style.height = `${e.target.scrollHeight}px`;
+          }}
           className={`
 w-full
 outline-none
 resize-none
+overflow-hidden
 bg-transparent
+min-h-[60px]
 ${darkMode ? "text-white placeholder:text-gray-400" : "text-black"}
 `}
         />

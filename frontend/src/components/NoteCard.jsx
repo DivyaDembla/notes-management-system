@@ -79,7 +79,7 @@ mb-4
               key={index}
               src={doodle}
               alt={`Doodle ${index}`}
-              className="
+              className={`
 w-28
 h-20
 sm:w-32
@@ -88,7 +88,14 @@ object-cover
 rounded-lg
 border
 bg-white
-"
+${
+  isCustomColor
+    ? "border-black"
+    : darkMode
+      ? "border-gray-600"
+      : "border-gray-300"
+}
+`}
             />
           ))}
         </div>
