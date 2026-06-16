@@ -57,6 +57,7 @@ w-full
 max-w-[700px]
 max-h-[90vh]
 overflow-y-auto
+hide-scrollbar
 transition-colors
 duration-300
 ${darkMode ? "bg-[#303134] text-white" : "bg-white text-black"}
@@ -161,9 +162,13 @@ ${darkMode ? "border-gray-600 text-white" : "border-gray-300 text-black"}
           />
 
           <textarea
-            rows="6"
+            rows="1"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
             className={`
 w-full
 border
@@ -171,6 +176,7 @@ p-3
 rounded-xl
 bg-transparent
 resize-none
+overflow-hidden
 outline-none
 ${darkMode ? "border-gray-600 text-white" : "border-gray-300 text-black"}
 `}
